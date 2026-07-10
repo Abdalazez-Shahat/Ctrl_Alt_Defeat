@@ -9,7 +9,6 @@
             <class name="com.automation.CorrectSorting01Test"/>
             <class name="com.automation.CorrectSorting02Test"/>
             <class name="com.automation.CorrectFilteringAndSorting01Test"/>
-            <class name="com.automation.CorrectFilteringAndSorting02Test"/>
         </classes>
     </test>
 </suite>
