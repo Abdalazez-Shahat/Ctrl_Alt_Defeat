@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import java.io.File;
 import java.time.Duration;
 
 public class BaseTest {
@@ -21,20 +22,28 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        // Download ChromeDriver version 149 to match the current Brave version
-        WebDriverManager.chromedriver().browserVersion("149").setup();
-
         ChromeOptions options = new ChromeOptions();
 
-        // Detect the current OS and set the correct Brave binary path
+        // Prefer Brave when it is installed; otherwise ChromeDriver uses Chrome.
         String os = System.getProperty("os.name").toLowerCase();
+        String bravePath;
         if (os.contains("win")) {
-            options.setBinary(BRAVE_WIN);
+            bravePath = BRAVE_WIN;
         } else if (os.contains("mac")) {
-            options.setBinary(BRAVE_MAC);
+            bravePath = BRAVE_MAC;
         } else {
-            options.setBinary(BRAVE_LINUX);
+            bravePath = BRAVE_LINUX;
         }
+
+        if (new File(bravePath).isFile()) {
+            options.setBinary(bravePath);
+            System.out.println("Using Brave browser: " + bravePath);
+        } else {
+            System.out.println("Brave was not found; using the installed Chrome browser");
+        }
+
+        // Download the ChromeDriver version that matches the selected browser.
+        WebDriverManager.chromedriver().setup();
 
         // Start the browser maximized and disable pop-up notifications
         options.addArguments("--start-maximized");

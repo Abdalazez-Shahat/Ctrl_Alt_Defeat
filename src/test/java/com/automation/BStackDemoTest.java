@@ -66,9 +66,9 @@ public class BStackDemoTest extends BaseTest {
         // Verify that the products page is loaded
         Assert.assertTrue(productsPage.isLoaded());
 
-        // Add the first product and a Samsung product to the cart
+        // Add the first product and a Samsung Galaxy product to the cart
         productsPage.addFirstProductToCart();
-        productsPage.addProductToCartByName("Samsung");
+        productsPage.addProductToCartByName("Galaxy");
 
         // Verify that the cart has at least one item
         int count = productsPage.getCartCount();

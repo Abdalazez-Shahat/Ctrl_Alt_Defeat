@@ -15,14 +15,14 @@ public class ProductsPage {
     private final WebDriverWait wait;
 
     // Locators for product cards and their elements
-    private final By productCards = By.cssSelector(".shelf-item");
+    private final By productCards = By.cssSelector(".shelf-container .shelf-item");
     private final By productName  = By.cssSelector(".shelf-item__title");
     private final By addToCartBtn = By.cssSelector(".shelf-item__buy-btn");
 
     // Locators for the cart
-    private final By cartIcon    = By.cssSelector(".float-cart__open-btn");
+    private final By cartIcon    = By.cssSelector(".bag--float-cart-closed");
     private final By cartCount   = By.cssSelector(".bag__quantity");
-    private final By cartSidebar = By.cssSelector(".float-cart");
+    private final By cartSidebar = By.cssSelector(".float-cart--open");
     private final By cartItems   = By.cssSelector(".shelf-item");
 
     public ProductsPage(WebDriver driver) {
@@ -82,13 +82,15 @@ public class ProductsPage {
 
     // Clicks the cart icon and waits for the cart sidebar to appear
     public void openCart() {
-        driver.findElement(cartIcon).click();
+        if (!isCartVisible()) {
+            wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
+        }
         wait.until(ExpectedConditions.visibilityOfElementLocated(cartSidebar));
         System.out.println("Cart opened successfully");
     }
 
     // Returns true if the cart sidebar is visible on the page
     public boolean isCartVisible() {
-        return !driver.findElements(cartSidebar).isEmpty();
+        return driver.findElements(cartSidebar).stream().anyMatch(WebElement::isDisplayed);
     }
 }
